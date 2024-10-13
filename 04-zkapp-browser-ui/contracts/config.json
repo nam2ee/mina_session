@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "deployAliases": {
+    "gamecontract": {
+      "networkId": "testnet",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
+      "keyPath": "keys/gamecontract.json",
+      "feepayerKeyPath": "/Users/yoonjae/.cache/zkapp-cli/keys/03-deploy.json",
+      "feepayerAlias": "03-deploy",
+      "fee": "0.1",
+      "smartContract": "game"
+    },
+    "fuck": {
+      "networkId": "testnet",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
+      "keyPath": "keys/fuck.json",
+      "feepayerKeyPath": "/Users/yoonjae/.cache/zkapp-cli/keys/03-deploy.json",
+      "feepayerAlias": "03-deploy",
+      "fee": "0.1",
+      "smartContract": "game"
+    },
+    "setup": {
+      "networkId": "testnet",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
+      "keyPath": "keys/setup.json",
+      "feepayerKeyPath": "/Users/yoonjae/.cache/zkapp-cli/keys/03-deploy.json",
+      "feepayerAlias": "03-deploy",
+      "fee": "0.1",
+      "smartContract": "game"
+    },
+    "kk": {
+      "networkId": "testnet",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
+      "keyPath": "keys/kk.json",
+      "feepayerKeyPath": "/Users/yoonjae/.cache/zkapp-cli/keys/03-deploy.json",
+      "feepayerAlias": "03-deploy",
+      "fee": "0.1",
+      "smartContract": "game"
+    },
+    "final": {
+      "networkId": "testnet",
+      "url": "https://api.minascan.io/node/devnet/v1/graphql",
+      "keyPath": "keys/final.json",
+      "feepayerKeyPath": "/Users/yoonjae/.cache/zkapp-cli/keys/03-deploy.json",
+      "feepayerAlias": "03-deploy",
+      "fee": "0.1",
+      "smartContract": "game"
+    }
+  }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auro Wallet Signing Experiment</title>
+    <script src="https://cdn.jsdelivr.net/npm/o1js@0.13.1/dist/web/o1js.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auro Wallet Signing Experiment</h1>
+    <p>This page demonstrates signing the data "1222" using the Auro wallet.</p>
+    
+    <button id="connectButton">Connect Auro Wallet</button>
+    <button id="signButton" disabled>Sign Data</button>
+    
+    <div id="result"></div>
+
+    <script>
+        let publicKey;
+        const connectButton = document.getElementById('connectButton');
+        const signButton = document.getElementById('signButton');
+        const resultDiv = document.getElementById('result');
+
+        connectButton.addEventListener('click', async () => {
+            if (typeof window.mina !== 'undefined') {
+                try {
+                    const accounts = await window.mina.requestAccounts();
+                    publicKey = accounts[0];
+                    resultDiv.textContent = `Connected with public key: ${publicKey}`;
+                    signButton.disabled = false;
+                } catch (error) {
+                    resultDiv.textContent = `Error connecting to Auro wallet: ${error.message}`;
+                }
+            } else {
+                resultDiv.textContent = 'Auro wallet is not installed. Please install it and try again.';
+            }
+        });
+
+        signButton.addEventListener('click', async () => {
+            if (typeof window.mina !== 'undefined' && publicKey) {
+                try {
+                    const dataToSign = "1222";
+                    const signature = await window.mina.signMessage({
+                        message: dataToSign,
+                    });
+                    
+                    resultDiv.innerHTML = `
+                        <strong>Signed Data:</strong> ${dataToSign}<br>
+                        <strong>Signature:</strong><br>
+                        Field: ${signature.signature.field}<br>
+                        Scalar: ${signature.signature.scalar}<br>
+                        <strong>Public Key:</strong> ${signature.publicKey}
+                    `;
+
+                    // Verify the signature
+                    const o1js = window.o1js;
+                    const verificationResult = await verifySignature(signature, dataToSign);
+                    resultDiv.innerHTML += `<br><strong>Verification Result:</strong> ${verificationResult}`;
+                } catch (error) {
+                    resultDiv.textContent = `Error signing message: ${error.message}`;
+                }
+            } else {
+                resultDiv.textContent = 'Please connect to Auro wallet first.';
+            }
+        });
+
+        async function verifySignature(signatureData, message) {
+            const o1js = window.o1js;
+            
+            // Convert signature components
+            const r = o1js.Field(signatureData.signature.field);
+            const s = o1js.Scalar.from(signatureData.signature.scalar);
+            const signature = new o1js.Signature(r, s);
+
+            // Convert public key
+            const publicKey = o1js.PublicKey.fromBase58(signatureData.publicKey);
+
+            // Convert message to Field
+            const messageField = o1js.Field(message);
+
+            // Verify signature
+            const isValid = signature.verify(publicKey, [messageField]);
+
+            return isValid.toBoolean();
+        }
+    </script>
+</body>
+</html>
